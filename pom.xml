@@ -136,6 +136,11 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
                     <encoding>UTF-8</encoding>
+                    <!-- Se fija explícitamente en 21 (en vez de depender únicamente de
+                         la propiedad heredada java.version) para evitar que, en máquinas
+                         con un JDK muy reciente instalado, el build termine usando una
+                         versión de "release" distinta a la del JDK 21 objetivo del proyecto. -->
+                    <release>21</release>
                 </configuration>
             </plugin>
         </plugins>
