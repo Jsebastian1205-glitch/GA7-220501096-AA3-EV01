@@ -1,7 +1,6 @@
 package com.pccompare.gestionusuarios.config;
 
 import com.pccompare.gestionusuarios.security.JwtAuthFilter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,14 +27,20 @@ import java.util.List;
  * sesiones HTTP. La autorización fina por rol se aplica con
  * {@code @PreAuthorize} en los controladores/servicios (habilitado con
  * {@link EnableMethodSecurity}).
+ *
+ * <p>Constructor escrito a mano (sin Lombok) para evitar depender de un
+ * procesador de anotaciones.
  */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-@RequiredArgsConstructor
 public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
+
+    public SecurityConfig(JwtAuthFilter jwtAuthFilter) {
+        this.jwtAuthFilter = jwtAuthFilter;
+    }
 
     /** Endpoints públicos: registro, login y consola H2 (solo perfil dev). */
     private static final String[] RUTAS_PUBLICAS = {

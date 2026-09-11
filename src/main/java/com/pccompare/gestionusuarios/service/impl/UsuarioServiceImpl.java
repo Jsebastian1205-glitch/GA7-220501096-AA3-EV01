@@ -11,7 +11,6 @@ import com.pccompare.gestionusuarios.model.Rol;
 import com.pccompare.gestionusuarios.model.Usuario;
 import com.pccompare.gestionusuarios.repository.UsuarioRepository;
 import com.pccompare.gestionusuarios.service.UsuarioService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,14 +29,21 @@ import java.util.List;
  *   <li>El usuario nunca se borra físicamente; un administrador solo puede
  *       cambiar su estado a INACTIVO (borrado lógico).</li>
  * </ul>
+ *
+ * <p>Constructor escrito a mano (sin Lombok) para evitar depender de un
+ * procesador de anotaciones.
  */
 @Service
-@RequiredArgsConstructor
 @Transactional
 public class UsuarioServiceImpl implements UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
+
+    public UsuarioServiceImpl(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
+        this.usuarioRepository = usuarioRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public Usuario registrar(RegistroUsuarioRequest request) {

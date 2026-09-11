@@ -6,7 +6,6 @@ import com.pccompare.gestionusuarios.exception.RecursoNoEncontradoException;
 import com.pccompare.gestionusuarios.model.PlanSuscripcion;
 import com.pccompare.gestionusuarios.repository.PlanSuscripcionRepository;
 import com.pccompare.gestionusuarios.service.PlanSuscripcionService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,13 +15,19 @@ import java.util.List;
  * Administración de los planes de suscripción. Solo un administrador puede
  * invocar estas operaciones (control de acceso aplicado en el controlador
  * con @PreAuthorize).
+ *
+ * <p>Constructor escrito a mano (sin Lombok) para evitar depender de un
+ * procesador de anotaciones.
  */
 @Service
-@RequiredArgsConstructor
 @Transactional
 public class PlanSuscripcionServiceImpl implements PlanSuscripcionService {
 
     private final PlanSuscripcionRepository planSuscripcionRepository;
+
+    public PlanSuscripcionServiceImpl(PlanSuscripcionRepository planSuscripcionRepository) {
+        this.planSuscripcionRepository = planSuscripcionRepository;
+    }
 
     @Override
     public PlanSuscripcion crear(PlanSuscripcionRequest request) {

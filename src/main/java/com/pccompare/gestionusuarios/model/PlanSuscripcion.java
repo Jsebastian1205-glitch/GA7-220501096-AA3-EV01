@@ -1,11 +1,6 @@
 package com.pccompare.gestionusuarios.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.math.BigDecimal;
 
@@ -13,14 +8,12 @@ import java.math.BigDecimal;
  * Plan de suscripción ofrecido por la plataforma (por ejemplo: Gratuito,
  * Premium Mensual, Premium Anual). Es administrado únicamente por un
  * {@link Rol#ADMIN} y consumido por los usuarios al suscribirse.
+ *
+ * <p>Getters, setters, constructores y builder escritos a mano (sin
+ * Lombok) para evitar depender de un procesador de anotaciones.
  */
 @Entity
 @Table(name = "planes_suscripcion")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class PlanSuscripcion {
 
     @Id
@@ -43,6 +36,115 @@ public class PlanSuscripcion {
 
     /** Permite desactivar un plan sin borrarlo (para no afectar el historial de suscripciones). */
     @Column(nullable = false)
-    @Builder.Default
     private boolean activo = true;
+
+    public PlanSuscripcion() {
+        // Constructor requerido por JPA/Hibernate.
+    }
+
+    public PlanSuscripcion(Long id, String nombre, String descripcion, BigDecimal precio,
+                            Integer duracionDias, boolean activo) {
+        this.id = id;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.precio = precio;
+        this.duracionDias = duracionDias;
+        this.activo = activo;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public BigDecimal getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(BigDecimal precio) {
+        this.precio = precio;
+    }
+
+    public Integer getDuracionDias() {
+        return duracionDias;
+    }
+
+    public void setDuracionDias(Integer duracionDias) {
+        this.duracionDias = duracionDias;
+    }
+
+    public boolean isActivo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
+    }
+
+    public static PlanSuscripcionBuilder builder() {
+        return new PlanSuscripcionBuilder();
+    }
+
+    /** Builder fluido para construir instancias de {@link PlanSuscripcion}. */
+    public static class PlanSuscripcionBuilder {
+        private Long id;
+        private String nombre;
+        private String descripcion;
+        private BigDecimal precio;
+        private Integer duracionDias;
+        private boolean activo = true;
+
+        public PlanSuscripcionBuilder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public PlanSuscripcionBuilder nombre(String nombre) {
+            this.nombre = nombre;
+            return this;
+        }
+
+        public PlanSuscripcionBuilder descripcion(String descripcion) {
+            this.descripcion = descripcion;
+            return this;
+        }
+
+        public PlanSuscripcionBuilder precio(BigDecimal precio) {
+            this.precio = precio;
+            return this;
+        }
+
+        public PlanSuscripcionBuilder duracionDias(Integer duracionDias) {
+            this.duracionDias = duracionDias;
+            return this;
+        }
+
+        public PlanSuscripcionBuilder activo(boolean activo) {
+            this.activo = activo;
+            return this;
+        }
+
+        public PlanSuscripcion build() {
+            return new PlanSuscripcion(id, nombre, descripcion, precio, duracionDias, activo);
+        }
+    }
 }

@@ -5,7 +5,6 @@ import com.pccompare.gestionusuarios.dto.request.RegistroUsuarioRequest;
 import com.pccompare.gestionusuarios.dto.response.AuthResponse;
 import com.pccompare.gestionusuarios.service.AutenticacionService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,13 +16,19 @@ import org.springframework.web.bind.annotation.*;
  *   <li>HU: "Como usuario quiero registrarme en la plataforma con mis datos personales".</li>
  *   <li>HU: "Como usuario quiero iniciar sesión con mi correo y contraseña".</li>
  * </ul>
+ *
+ * <p>Constructor escrito a mano (sin Lombok) para evitar depender de un
+ * procesador de anotaciones.
  */
 @RestController
 @RequestMapping("/api/auth")
-@RequiredArgsConstructor
 public class AuthController {
 
     private final AutenticacionService autenticacionService;
+
+    public AuthController(AutenticacionService autenticacionService) {
+        this.autenticacionService = autenticacionService;
+    }
 
     @PostMapping("/registro")
     public ResponseEntity<AuthResponse> registrar(@Valid @RequestBody RegistroUsuarioRequest request) {

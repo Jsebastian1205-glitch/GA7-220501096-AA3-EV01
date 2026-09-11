@@ -4,7 +4,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,15 +19,22 @@ import java.io.IOException;
  * {@code Authorization: Bearer <token>} válido, autentica al usuario en el
  * contexto de seguridad de Spring para que los controladores puedan aplicar
  * las reglas de autorización por rol (@PreAuthorize).
+ *
+ * <p>Constructor escrito a mano (sin Lombok) para evitar depender de un
+ * procesador de anotaciones.
  */
 @Component
-@RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     private static final String PREFIJO_BEARER = "Bearer ";
 
     private final JwtUtil jwtUtil;
     private final CustomUserDetailsService userDetailsService;
+
+    public JwtAuthFilter(JwtUtil jwtUtil, CustomUserDetailsService userDetailsService) {
+        this.jwtUtil = jwtUtil;
+        this.userDetailsService = userDetailsService;
+    }
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,

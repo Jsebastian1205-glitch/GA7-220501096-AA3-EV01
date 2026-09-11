@@ -10,7 +10,6 @@ import com.pccompare.gestionusuarios.repository.PlanSuscripcionRepository;
 import com.pccompare.gestionusuarios.repository.SuscripcionRepository;
 import com.pccompare.gestionusuarios.repository.UsuarioRepository;
 import com.pccompare.gestionusuarios.service.SuscripcionService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,15 +29,24 @@ import java.util.Optional;
  *       del plan (fechaInicio + duracionDias), nunca la recibe el cliente.</li>
  *   <li>Solo el dueño de la suscripción (o un administrador) puede cancelarla.</li>
  * </ul>
+ *
+ * <p>Constructor escrito a mano (sin Lombok) para evitar depender de un
+ * procesador de anotaciones.
  */
 @Service
-@RequiredArgsConstructor
 @Transactional
 public class SuscripcionServiceImpl implements SuscripcionService {
 
     private final SuscripcionRepository suscripcionRepository;
     private final UsuarioRepository usuarioRepository;
     private final PlanSuscripcionRepository planSuscripcionRepository;
+
+    public SuscripcionServiceImpl(SuscripcionRepository suscripcionRepository, UsuarioRepository usuarioRepository,
+                                   PlanSuscripcionRepository planSuscripcionRepository) {
+        this.suscripcionRepository = suscripcionRepository;
+        this.usuarioRepository = usuarioRepository;
+        this.planSuscripcionRepository = planSuscripcionRepository;
+    }
 
     @Override
     public Suscripcion suscribir(Long usuarioId, Long planId) {

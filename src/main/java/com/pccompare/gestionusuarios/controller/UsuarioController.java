@@ -10,7 +10,6 @@ import com.pccompare.gestionusuarios.security.UsuarioAutenticadoProvider;
 import com.pccompare.gestionusuarios.service.UsuarioService;
 import com.pccompare.gestionusuarios.util.UsuarioMapper;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -24,14 +23,21 @@ import java.util.List;
  * autenticado sobre su propio perfil (HU "actualizar mi perfil"). Los demás
  * endpoints (listar, cambiar rol, cambiar estado) están restringidos al rol
  * ADMIN (HU "gestionar usuarios / asignar roles").
+ *
+ * <p>Constructor escrito a mano (sin Lombok) para evitar depender de un
+ * procesador de anotaciones.
  */
 @RestController
 @RequestMapping("/api/usuarios")
-@RequiredArgsConstructor
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
     private final UsuarioAutenticadoProvider usuarioAutenticadoProvider;
+
+    public UsuarioController(UsuarioService usuarioService, UsuarioAutenticadoProvider usuarioAutenticadoProvider) {
+        this.usuarioService = usuarioService;
+        this.usuarioAutenticadoProvider = usuarioAutenticadoProvider;
+    }
 
     // ---------------------------------------------------------------
     // Perfil del propio usuario autenticado

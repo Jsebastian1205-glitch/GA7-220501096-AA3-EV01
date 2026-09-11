@@ -1,11 +1,6 @@
 package com.pccompare.gestionusuarios.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -18,6 +13,11 @@ import java.util.List;
  * gestión de usuarios. Un usuario puede tener el rol {@link Rol#ADMIN} o
  * {@link Rol#USUARIO} y, mientras esté {@link EstadoUsuario#ACTIVO}, puede
  * autenticarse y administrar su propia suscripción.
+ *
+ * <p>Nota de implementación: los getters, setters, constructores y el
+ * builder se escriben aquí de forma explícita (sin Lombok) para que el
+ * proyecto compile de manera predecible en cualquier equipo, sin depender
+ * de un procesador de anotaciones en tiempo de compilación.
  */
 @Entity
 @Table(
@@ -27,11 +27,6 @@ import java.util.List;
                 @UniqueConstraint(name = "uk_usuario_username", columnNames = "username")
         }
 )
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class Usuario {
 
     @Id
@@ -57,12 +52,10 @@ public class Usuario {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    @Builder.Default
     private Rol rol = Rol.USUARIO;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    @Builder.Default
     private EstadoUsuario estado = EstadoUsuario.ACTIVO;
 
     @Column(name = "fecha_registro", nullable = false, updatable = false)
@@ -70,8 +63,25 @@ public class Usuario {
 
     /** Historial de suscripciones del usuario (relación 1:N). */
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
     private List<Suscripcion> suscripciones = new ArrayList<>();
+
+    public Usuario() {
+        // Constructor requerido por JPA/Hibernate.
+    }
+
+    public Usuario(Long id, String nombre, String apellido, String username, String email, String password,
+                   Rol rol, EstadoUsuario estado, LocalDateTime fechaRegistro, List<Suscripcion> suscripciones) {
+        this.id = id;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.rol = rol;
+        this.estado = estado;
+        this.fechaRegistro = fechaRegistro;
+        this.suscripciones = suscripciones != null ? suscripciones : new ArrayList<>();
+    }
 
     @PrePersist
     protected void alPersistir() {
@@ -88,5 +98,165 @@ public class Usuario {
 
     public boolean esAdministrador() {
         return this.rol == Rol.ADMIN;
+    }
+
+    // ---------------------------------------------------------------
+    // Getters y setters
+    // ---------------------------------------------------------------
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Rol getRol() {
+        return rol;
+    }
+
+    public void setRol(Rol rol) {
+        this.rol = rol;
+    }
+
+    public EstadoUsuario getEstado() {
+        return estado;
+    }
+
+    public void setEstado(EstadoUsuario estado) {
+        this.estado = estado;
+    }
+
+    public LocalDateTime getFechaRegistro() {
+        return fechaRegistro;
+    }
+
+    public void setFechaRegistro(LocalDateTime fechaRegistro) {
+        this.fechaRegistro = fechaRegistro;
+    }
+
+    public List<Suscripcion> getSuscripciones() {
+        return suscripciones;
+    }
+
+    public void setSuscripciones(List<Suscripcion> suscripciones) {
+        this.suscripciones = suscripciones;
+    }
+
+    // ---------------------------------------------------------------
+    // Builder (equivalente escrito a mano al @Builder de Lombok)
+    // ---------------------------------------------------------------
+
+    public static UsuarioBuilder builder() {
+        return new UsuarioBuilder();
+    }
+
+    /** Builder fluido para construir instancias de {@link Usuario} de forma legible. */
+    public static class UsuarioBuilder {
+        private Long id;
+        private String nombre;
+        private String apellido;
+        private String username;
+        private String email;
+        private String password;
+        private Rol rol = Rol.USUARIO;
+        private EstadoUsuario estado = EstadoUsuario.ACTIVO;
+        private LocalDateTime fechaRegistro;
+        private List<Suscripcion> suscripciones = new ArrayList<>();
+
+        public UsuarioBuilder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public UsuarioBuilder nombre(String nombre) {
+            this.nombre = nombre;
+            return this;
+        }
+
+        public UsuarioBuilder apellido(String apellido) {
+            this.apellido = apellido;
+            return this;
+        }
+
+        public UsuarioBuilder username(String username) {
+            this.username = username;
+            return this;
+        }
+
+        public UsuarioBuilder email(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public UsuarioBuilder password(String password) {
+            this.password = password;
+            return this;
+        }
+
+        public UsuarioBuilder rol(Rol rol) {
+            this.rol = rol;
+            return this;
+        }
+
+        public UsuarioBuilder estado(EstadoUsuario estado) {
+            this.estado = estado;
+            return this;
+        }
+
+        public UsuarioBuilder fechaRegistro(LocalDateTime fechaRegistro) {
+            this.fechaRegistro = fechaRegistro;
+            return this;
+        }
+
+        public UsuarioBuilder suscripciones(List<Suscripcion> suscripciones) {
+            this.suscripciones = suscripciones;
+            return this;
+        }
+
+        public Usuario build() {
+            return new Usuario(id, nombre, apellido, username, email, password, rol, estado, fechaRegistro, suscripciones);
+        }
     }
 }

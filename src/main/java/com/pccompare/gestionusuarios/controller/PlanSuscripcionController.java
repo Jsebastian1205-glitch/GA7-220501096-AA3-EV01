@@ -5,7 +5,6 @@ import com.pccompare.gestionusuarios.dto.response.PlanSuscripcionResponse;
 import com.pccompare.gestionusuarios.service.PlanSuscripcionService;
 import com.pccompare.gestionusuarios.util.PlanSuscripcionMapper;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,13 +17,19 @@ import java.util.List;
  * gestionar los planes de suscripción"). La consulta de planes activos es
  * pública dentro de la plataforma para que cualquier usuario autenticado
  * pueda elegir uno; la creación/edición/baja está reservada a ADMIN.
+ *
+ * <p>Constructor escrito a mano (sin Lombok) para evitar depender de un
+ * procesador de anotaciones.
  */
 @RestController
 @RequestMapping("/api/planes")
-@RequiredArgsConstructor
 public class PlanSuscripcionController {
 
     private final PlanSuscripcionService planSuscripcionService;
+
+    public PlanSuscripcionController(PlanSuscripcionService planSuscripcionService) {
+        this.planSuscripcionService = planSuscripcionService;
+    }
 
     @GetMapping
     public ResponseEntity<List<PlanSuscripcionResponse>> listarActivos() {

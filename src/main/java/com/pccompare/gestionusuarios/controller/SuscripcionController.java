@@ -7,7 +7,6 @@ import com.pccompare.gestionusuarios.security.UsuarioAutenticadoProvider;
 import com.pccompare.gestionusuarios.service.SuscripcionService;
 import com.pccompare.gestionusuarios.util.SuscripcionMapper;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,14 +23,22 @@ import java.util.List;
  *   <li>HU: "Como usuario quiero cancelar mi suscripción".</li>
  *   <li>HU: "Como administrador quiero ver el estado de las suscripciones de los usuarios".</li>
  * </ul>
+ *
+ * <p>Constructor escrito a mano (sin Lombok) para evitar depender de un
+ * procesador de anotaciones.
  */
 @RestController
 @RequestMapping("/api/suscripciones")
-@RequiredArgsConstructor
 public class SuscripcionController {
 
     private final SuscripcionService suscripcionService;
     private final UsuarioAutenticadoProvider usuarioAutenticadoProvider;
+
+    public SuscripcionController(SuscripcionService suscripcionService,
+                                  UsuarioAutenticadoProvider usuarioAutenticadoProvider) {
+        this.suscripcionService = suscripcionService;
+        this.usuarioAutenticadoProvider = usuarioAutenticadoProvider;
+    }
 
     @PostMapping
     public ResponseEntity<SuscripcionResponse> suscribirme(@Valid @RequestBody SuscribirseRequest request) {

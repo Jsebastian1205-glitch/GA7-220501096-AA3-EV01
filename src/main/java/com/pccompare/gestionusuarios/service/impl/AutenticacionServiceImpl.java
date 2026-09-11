@@ -10,7 +10,6 @@ import com.pccompare.gestionusuarios.security.JwtUtil;
 import com.pccompare.gestionusuarios.service.AutenticacionService;
 import com.pccompare.gestionusuarios.service.UsuarioService;
 import com.pccompare.gestionusuarios.util.UsuarioMapper;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,9 +21,11 @@ import org.springframework.transaction.annotation.Transactional;
  * <p>Regla de negocio: solo pueden iniciar sesión los usuarios con estado
  * ACTIVO; un usuario INACTIVO recibe un mensaje explícito en vez de un
  * genérico "credenciales inválidas".
+ *
+ * <p>Constructor escrito a mano (sin Lombok) para evitar depender de un
+ * procesador de anotaciones.
  */
 @Service
-@RequiredArgsConstructor
 @Transactional
 public class AutenticacionServiceImpl implements AutenticacionService {
 
@@ -32,6 +33,14 @@ public class AutenticacionServiceImpl implements AutenticacionService {
     private final UsuarioService usuarioService;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+
+    public AutenticacionServiceImpl(UsuarioRepository usuarioRepository, UsuarioService usuarioService,
+                                     PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
+        this.usuarioRepository = usuarioRepository;
+        this.usuarioService = usuarioService;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
+    }
 
     @Override
     public AuthResponse registrarYAutenticar(RegistroUsuarioRequest request) {

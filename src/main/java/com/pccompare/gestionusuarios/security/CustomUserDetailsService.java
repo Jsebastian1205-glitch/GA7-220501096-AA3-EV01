@@ -2,7 +2,6 @@ package com.pccompare.gestionusuarios.security;
 
 import com.pccompare.gestionusuarios.model.Usuario;
 import com.pccompare.gestionusuarios.repository.UsuarioRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,12 +14,18 @@ import java.util.List;
  * Adapta la entidad {@link Usuario} al modelo {@link UserDetails} que
  * Spring Security necesita para la autenticación y el control de acceso
  * por rol (ROLE_ADMIN / ROLE_USUARIO).
+ *
+ * <p>Constructor escrito a mano (sin Lombok) para evitar depender de un
+ * procesador de anotaciones.
  */
 @Service
-@RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final UsuarioRepository usuarioRepository;
+
+    public CustomUserDetailsService(UsuarioRepository usuarioRepository) {
+        this.usuarioRepository = usuarioRepository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
