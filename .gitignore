@@ -1,0 +1,25 @@
+target/
+*.class
+
+# Archivos de configuración local con credenciales reales (no versionar)
+application-local.yml
+application-local.properties
+.env
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.classpath
+.project
+.settings/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Base de datos H2 de pruebas locales
+*.mv.db
