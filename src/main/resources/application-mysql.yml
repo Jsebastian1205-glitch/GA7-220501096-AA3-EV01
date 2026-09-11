@@ -1,0 +1,23 @@
+# Perfil de conexión a la base de datos MySQL del proyecto.
+# Activar con: --spring.profiles.active=mysql
+# Ajusta la URL, el usuario y la contraseña según la base de datos con la
+# que ya estás trabajando; se recomienda NO dejar credenciales reales en
+# este archivo, sino suministrarlas por variables de entorno
+# (DB_URL, DB_USERNAME, DB_PASSWORD) tal como está configurado abajo.
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/pc_compare_db?useSSL=false&serverTimezone=UTC&createDatabaseIfNotExist=true}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      # "update" mientras el modelo de datos está en evolución.
+      # Cambiar a "validate" cuando el esquema quede estable en producción,
+      # y gestionar los cambios con un script/migración versionada.
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true

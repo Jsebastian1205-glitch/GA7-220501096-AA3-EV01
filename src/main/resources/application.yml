@@ -1,0 +1,31 @@
+# =============================================================================
+# Configuración general del módulo de Gestión de Usuarios - PC Compare
+# =============================================================================
+# El perfil activo por defecto es "dev" (base de datos H2 en memoria) para que
+# el proyecto pueda ejecutarse y probarse sin depender de un servidor MySQL.
+# Para conectarlo a la base de datos MySQL del proyecto, activar el perfil
+# "mysql" y completar las credenciales (ver application-mysql.yml).
+# =============================================================================
+
+spring:
+  application:
+    name: gestion-usuarios
+  profiles:
+    active: dev
+  jackson:
+    default-property-inclusion: non_null
+
+server:
+  port: 8080
+  error:
+    include-message: always
+
+# Configuración propia de la aplicación (clave y expiración del JWT).
+# En un entorno real, jwt.secret debe suministrarse por variable de entorno,
+# nunca dejarse escrito en este archivo.
+app:
+  jwt:
+    secret: ${JWT_SECRET:cambiar-esta-clave-en-produccion-por-una-de-al-menos-256-bits}
+    expiration-ms: ${JWT_EXPIRATION_MS:86400000} # 24 horas
+  suscripciones:
+    dias-plan-gratuito: 3650 # el plan gratuito no vence (10 años simbólicos)
